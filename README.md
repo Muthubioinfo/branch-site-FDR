@@ -7,3 +7,16 @@ To run the analysis, users are required to download and compile ```EVOLVER``` an
 ## Simulating codon alignments under different levels of positive selection
 To simulate alignments codon alignments, one can use EVOLVER program to PAML package ```EVOLVER```. 
 
+
+## Branch-site test for positive selection
+
+## Log-likelihood estimation
+
+
+## Likelihood ratio test, P-values and FDR
+
+
+
+
+
+
