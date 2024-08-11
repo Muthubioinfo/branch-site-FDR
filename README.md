@@ -34,9 +34,26 @@ The log-likelihood under alternative model is estimated for three iterations, ea
 Then, take the largest log-likelihood among the all log-likelihood estimates under both the null and alternative models. This is to ensure that the $\ell_{1} \le \ell_{0}$).
 
 ### Likelihood ratio test, P-values and FDR
-The ```rst1``` file output from ```CODEML``` are imported in R. Run the ```FDR``` function in ```function_FDR.R``` and calculate the likelihood ratio test or ```LRT``` and ```P-values```, and the ```q-values``` after FDR correction method. In the ```FDR``` function calculates the power of postitive selection using both the BH-FDR (Benjamini-Hochberg, 1995) and ST-FDR (Storey, 2002) methods. 
+The ```rst1``` file output from ```CODEML``` is imported in R. Run the ```FDR``` function in ```function_FDR.R``` and calculate the likelihood ratio test or ```LRT```, and ```P-values```, and the ```q-values``` after FDR correction method. The P-values and q-values are significant at 5%. In the ```FDR``` function calculates the power of postitive selection using both the BH-FDR (Benjamini-Hochberg, 1995) and ST-FDR (Storey, 2002) methods. 
 
-## Real dataset
+## Realistic simulation using empirical data
+For this section, I test the statistical properties of branch-site test and FDR under real data setting. The dataset is obtained from [Kosiol et al. (2008)](https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1000144), consisting of 9,566 genes with ancestral primate branch focussed as the foreground. The tree topology specified in the Kosiol dataset is fixed for all the genes. The log-likelihood, $\ell_{0}$ and $\ell_{1}$ are evaluated under the null and alternative model assuming F3X4 codon frequency model. The respective data of the parameter estimates such as branch lengths, kappa, are recommended to be stored in a separate file. 
+
+The aim is to construct a realistic simulation using the existing primate dataset. For this analysis, I recommend to remove all the genes that has been inferred under positive selection such that the P-values evaluated are not significant, and ensure that all the alignments do not have any missing data (or missing species) within the specified tree topology. This ensures to avoid any unwanted noise in the experiment. 
+For the primate dataset, the filtering resulted in 6903 genes. These genes are considered as neutral genes for the primate branch.
+
+To construct a realistic simulation, randomly select $n = 500$ genes. One can use the following command to move files to another directory.
+
+```
+find . -mindepth 1 -maxdepth 1 -type f | shuf | head -n 10 | xargs -I{} mv {} dest_dir/modified/
+```
+Note: 'dest_dir' is the directory with all the 6903 genes or gene alignments. Create a directory called 'modified' before running the above command. It is best to keep a copy of the filenames of the randomly generated $n$ genes to avoid any mishaps. 
+
+The respective parameters estimated from $n$ genes (such as branch lengths and transition-transversion ratio) are used in ```EVOLVER``` for simulating positive selected codons. For simulating positive selection, one uses alternative hypothesis with either $\omega_2 = 4$ (moderate selective pressure) or $\omega_2 = 10$ (strong selective pressure). Then, these newly simulated positive codons are concatenated at the end of $n$ gene alignment. Thus, the modified alignments now has the positively selected codons and are assumed to be under the alternative hypothesis. The remaining 6,403 unmodified genes are assumed to be under the null hypothesis.
+
+Now, all the alignments are analysed under the branch-site test. Use the ```function_FDR.R```, to calculate the LRT, and the P-values and q-value significant at 5% confidence level. 
+
+
 
 ## Simulating model misspecification
 
