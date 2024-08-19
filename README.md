@@ -17,15 +17,15 @@ Under this basis of simulation setup, we can different phylogenomic datasets und
 These are parameters of the branch-site test that determine positive selection are -
 | Parameters of branch-site test |Description                    | Values used for different simulation   |
 |--------------------------------|--------------------------------|----------------------------------------|
-|        $\omega{_2}$            | Strength of positive selection | 1.5, 2, 3, 5, 8, 10 |
+|        $\omega{_2}$           | Strength of positive selection | 1.5, 2, 3, 5, 8, 10 |
 | $p_{2}$                        | Proportion of positively selected sites | 0.01, 0.05, 0.15, 0.20, 0.50 |
-| $L_{c}$                        | Number of codon sites | 100, 200, 1000, 10000 | 
-| %TP                            | Percentage true positives among all simulations | 0.1, 0.2, 0.5, 1, 2, 5, 20, 50, 100 |
+| $L_{c}$                     | Number of codon sites | 100, 200, 1000, 10000 | 
+| %TP                          | Percentage true positives among all simulations | 0.1, 0.2, 0.5, 1, 2, 5, 20, 50, 100 |
 
 
 A total of 24 different phylogenomic datasets can be simulated.  The positive selection for the two trees (TREE I has 8 species and TREE II has 16 species) are tested by labelling either internal ($\alpha$) and external branch ($\beta$).
 
-Use the ```MCcodonNSbranchsites.dat``` control file from [MCbranchsite_files_simulations](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/MCbranchsite_files_simulations) directory to simulate codon alignments under different positive selection setting. In this directory, the folders ```alpha_branch_...``` and ```beta_branch_...``` has the control files for simulating sequences with positive selection at either alpha (internal) and beta (external) branches. For example, ```alpha_branch_omega``` has ```MCcodonNSbranchsites.dat``` that assumes four site classes (0, 1, 2a and 2b). In 2a and 2b, the $\omega{_2} > 1$ at the foreground alpha branch by specifying omega = 1.5, 2, 3, 5, 8 and 10. 
+Use the ```MCcodonNSbranchsites.dat``` control files from [MCbranchsite_files_simulations](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/MCbranchsite_files_simulations) directory to simulate codon alignments under different positive selection setting, as shown in the above table. Each subdirectory named ```alpha_branch_...``` and ```beta_branch_...``` contains the control file for each parametric setting of branch-site test (omega, codon sites, ) labelling either alpha (internal) or beta (external) as foreground branches. For example, the ```MCcodonNSbranchsites.dat``` file from ```alpha_branch_omega``` assumes four site classes (0, 1, 2a and 2b). In 2a and 2b, the $\omega{_2} > 1$ at the $\alpha$ branch by specifying omega = 1.5, 2, 3, 5, 8 and 10. 
 
 In the ```MCcodonNSbranchsites.dat```, change the number of species to 16 to simulate codon alignments under TREE II. When the null hypothesis is true, all the site class of the branch-site test have conserved sites (i.e., site class 0 with proportion of sites, $p_{0}$ having $0 < \omega < 1$) or neutral (Site class 1 with proportion of sites, $p_{1}$ having $\omega = 1$). When the codon alignment is simulated under the alternate hypothesis, the site class 2a and 2b has foreground $\omega_{2} = 4$. 
 
@@ -35,7 +35,7 @@ In the ```MCcodonNSbranchsites.dat```, change the number of species to 16 to sim
 ### Log-likelihood estimation
 For the given sequence alignment, the log-likelihoods are evaluated under the null model ($\ell_{0}$) and alternative model ($\ell_{1}$) using the ```CODEML``` program. Under the null model, the log-likelihood ($\ell_{0}$) is estimated by fixing the [$\omega$ to 1](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/null_model), whereas the omega and other free parameters are estimated under the alternative model. Use the control files from [codeml_ctl_positive_selection](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection) to evalute the $\ell_{0}$ and $ell_{1}$ under the null and alternative models respectively. The log-likelihood under alternative model is estimated for three iterations each with initial $\omega = [1](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/alternate_iteration_1), [2](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/alternate_iteration_2),$ and $[4](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/alternate_iteration_3)$. 
 
-Running the ```CODEML```  program returns output ```rst1``` file containing the estimated parameters and maximum likelihood for each gene. Thus, for four iterations, we have four rst1 files generated. The rst1 files after analysing under null hypothesis is named as ```rst1H0null```, ```rst1H0alt1```,```rst1H0alt2``` and ```rst1H0alt3```. Similarly, the rst1 files for simulations under the alternative hypothesis are ```rst1H1null```, ```rst1H1alt1```,```rst1H1alt2``` and ```rst1H1alt3```. 
+Running the ```CODEML```  program returns the output in ```rst1``` file containing the estimated parameters and maximum likelihood for each gene. We generate four rst1 files for the four iterations (null model, alternative model 1, 2 and 3). The rst1 files after analysing under null hypothesis is named as ```rst1H0null```, ```rst1H0alt1```,```rst1H0alt2``` and ```rst1H0alt3```. Similarly, the rst1 files for simulations under the alternative hypothesis are named as ```rst1H1null```, ```rst1H1alt1```,```rst1H1alt2``` and ```rst1H1alt3```. 
 
 
 ### Likelihood ratio test, P-values and FDR
