@@ -5,13 +5,12 @@ This repository contains the files to recreate the analysis in Chapter 2 - Stati
 To run the analysis, users are required to download and compile ```EVOLVER``` and ```CODEML``` programs available in ```PAML``` package, see [http://abacus.gene.ucl.ac.uk/software/paml.html](http://abacus.gene.ucl.ac.uk/software/paml.html). Use bash/LINUX commands to run PAML programs.
 
 ## Simulating codon alignments under different levels of positive selection
-To simulate alignments codon alignments, use the ```EVOLVER``` program by setting the option to 6 (for codon datasets) and specifying the dat file ```MCcodonNSbranchsites.dat```
+To simulate codon sequence alignments, use the EVOLVER program and select option 6. Ensure that the control file MCcodonNSbranchsites.dat is specified in the working directory.
 
 ```
 evolver 6 MCcodonNSbranchsites.dat
 ```
-
-Phylogenomic dataset is simulated for two trees names as TREE I and TREE II. TREE I consists of 8 species and TREE II has 16 species. Both the trees assume uniform codon frequencies (1/61) and uniform branch lengths of 0.3 nucleotide substitution per site. The total number of simulations are set to 10,000 genes/hypothesis. 
+A phylogenomic dataset comprising of 10,000 is simulated for two trees names as TREE I and TREE II. Among the 10,000 simulations, we assume a 10% level under positive selection. TREE I consists of 8 species and TREE II has 16 species. Both the trees assume uniform codon frequencies (1/61) and uniform branch lengths of 0.3 nucleotide substitution per site. The total number of simulations are set to 10,000 genes/hypothesis. 
 
 Under this basis of simulation setup, we can different phylogenomic datasets under different levels of positive selection, determined by the parameters of the branch-site test.
 These are parameters of the branch-site test that determine positive selection are -
