@@ -27,7 +27,7 @@ A total of 24 different phylogenomic datasets can be simulated.  The positive se
 
 Use the ```MCcodonNSbranchsites.dat``` control files from [MCbranchsite_files_simulations](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/MCbranchsite_files_simulations) directory to simulate codon alignments under different positive selection setting, as shown in the above table. Each subdirectory named ```alpha_branch_...``` and ```beta_branch_...``` contains the control file for each parametric setting of branch-site test (omega, codon sites, ) labelling either alpha (internal) or beta (external) as foreground branches. For example, the ```MCcodonNSbranchsites.dat``` file from ```alpha_branch_omega``` assumes four site classes (0, 1, 2a and 2b). In 2a and 2b, the $\omega{_2} > 1$ at the $\alpha$ branch by specifying omega = 1.5, 2, 3, 5, 8 and 10. 
 
-In the ```MCcodonNSbranchsites.dat```, change the number of species to 16 to simulate codon alignments under TREE II. When the null hypothesis is true, all the site class of the branch-site test have conserved sites (i.e., site class 0 with proportion of sites, $p_{0}$ having $0 < \omega < 1$) or neutral (Site class 1 with proportion of sites, $p_{1}$ having $\omega = 1$). When the codon alignment is simulated under the alternate hypothesis, the site class 2a and 2b has foreground $\omega_{2} = 4$. 
+In the ```MCcodonNSbranchsites.dat```, change the number of species to 16 to simulate codon alignments under TREE II.
 
 
 ## Branch-site test for positive selection
@@ -39,7 +39,7 @@ Running the ```CODEML```  program returns the output in ```rst1``` file containi
 
 
 ### Likelihood ratio test, P-values and FDR
-Import all the ```rst1``` files in R/Rstudio. Run the ```simFDR()``` function in ```simFDR.R``` available in [https://github.com/Muthubioinfo/branch-site_FDR/blob/main/function_FDR.R](https://github.com/Muthubioinfo/branch-site_FDR/blob/main/function_FDR.R), and calculate the likelihood ratio test or ```LRT```, and ```P-values```, and the ```q-values``` under BH-FDR (Benjamini and Hochberg, 1995) and ST-FDR (Storey, 2002) correction method. The P-values and q-values are significant at 5%. In the ```FDR``` function calculates the power of positive selection using both the BH-FDR (Benjamini-Hochberg, 1995) and ST-FDR (Storey, 2002) methods. 
+Import all the ```rst1``` files in R/Rstudio. Run the ```simFDR()``` function in  available in [```function_FDR.R```](https://github.com/Muthubioinfo/branch-site_FDR/blob/main/function_FDR.R), and calculate the likelihood ratio test or ```LRT```, and ```P-values```, and the ```q-values``` under BH-FDR (Benjamini and Hochberg, 1995) and ST-FDR (Storey, 2002) correction method. The P-values and q-values are significant at 5%. In the ```FDR``` function calculates the power of positive selection using both the BH-FDR (Benjamini-Hochberg, 1995) and ST-FDR (Storey, 2002) methods. 
 
 
 ## Realistic simulation using empirical data
