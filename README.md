@@ -10,8 +10,8 @@ Consider two phylogenetic trees, TREE I with 8 species and TREE II with 16 speci
 We can improve the level of phylogenomic simulation by simulating under different levels of positive selection, as determined by the parameters of the branch-site model. 
 
 
-|Parameters of branch-site test | Description | Parameter value used at each phylogenomic simulation  |
-|----------------------------------|-------------------------------------------------|--------------------------------------------:|:----:|:----:|:-----:|:---:|:--:|:--:|:--:|:---:|
+|Parameters of branch-site test | Description | Parameter value at each phylogenomic simulation  |
+|----------------------------------|-------------------------------------------------|----------------|
 |        $\omega{_2}$           | Strength of positive selection | 1.5, 2, 3, 5, 8, 10 |
 | $p_{2}$                        | Proportion of positively selected sites | 0.01, 0.05, 0.15, 0.20, 0.50 |
 | $L_{c}$                     | Number of codon sites | 100, 200, 1000, 10000 |
