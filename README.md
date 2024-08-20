@@ -5,10 +5,11 @@ This repository contains the files to recreate the analysis in Chapter 2 - Stati
 To run the analysis, you are required to download and compile ```EVOLVER``` and ```CODEML``` programs available in ```PAML``` package, see [http://abacus.gene.ucl.ac.uk/software/paml.html](http://abacus.gene.ucl.ac.uk/software/paml.html). Use bash/LINUX commands to run PAML programs.
 
 ## Simulating codon alignments under different levels of positive selection
-Simulate two trees named as TREE I and TREE II. TREE I has 8 species and TREE II has 16 species. Both the trees are assumed to have uniform codon frequencies (1/61) and uniform branch length of 0.3 nucleotide substitution per site. Replicate the simulation 10,000 times (or 10,000 genes), such that 9000 genes are null hypotheses and the remaining 10% are alternative hypotheses. This total of 10,000 genes make up a phylogenome.
+Consider two phylogenetic trees, TREE I with 8 species and TREE II with 16 species. Both trees assume uniform codon frequencies (1/61) and a uniform branch length of 0.3 nucleotide substitutions per site. The transition-transversion ratio $\kappa$ is set to 2. Simulate 10,000 protein-coding genes or codon alignments, with 90% genes representing null hypotheses (9000 genes) and the remaining 10% represent the alternative hypotheses, making up a phylogenome of 10,000 genes. 
 
-We can improve the level of phylogenomic simulation by simulating under different levels of positive selection. This is determined by the parameters of the branch-site test. These are parameters of the branch-site test that determine positive selection are -
-| Parameters of branch-site test |Description                    | Values used for different simulation   |
+We can improve the level of phylogenomic simulation by simulating under different levels of positive selection, as determined by the parameters of the branch-site model. 
+
+| Parameters of branch-site test | Description                    | Parameter value used at each phylogenomic simulation   |
 |--------------------------------|--------------------------------|----------------------------------------|
 |        $\omega{_2}$           | Strength of positive selection | 1.5, 2, 3, 5, 8, 10 |
 | $p_{2}$                        | Proportion of positively selected sites | 0.01, 0.05, 0.15, 0.20, 0.50 |
@@ -16,7 +17,7 @@ We can improve the level of phylogenomic simulation by simulating under differen
 | %TP                          | Percentage true positives among all simulations | 0.1, 0.2, 0.5, 1, 2, 5, 20, 50, 100 |
 
 
-There is a total of 24 different phylogenomic datasets can be simulated.  The positive selection for the two trees (TREE I has 8 species and TREE II has 16 species) are tested by labelling either internal ($\alpha$) and external branch ($\beta$).
+Now, a total of 24 different phylogenomic datasets can be simulated based on the table above.  The positive selection for the two trees (TREE I has 8 species and TREE II has 16 species) are tested by labelling either internal ($\alpha$) and external branch ($\beta$).
 
 To simulate codon sequence alignments under different settings shown above, use the EVOLVER program and select option 6. Ensure that the appropriate control file called MCcodonNSbranchsites.dat is specified in the working directory. The control file for the appropriate parametric setting in available in [MCbranchsite_files_simulations](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/MCbranchsite_files_simulations).
 
@@ -24,9 +25,7 @@ To simulate codon sequence alignments under different settings shown above, use 
 evolver 6 MCcodonNSbranchsites.dat
 ```
 
-Each subdirectory named ```alpha_branch_...``` and ```beta_branch_...``` contains the control file for each parametric setting of branch-site test (selective pressure, proportion of sites under positive selection, codon sites and true positive level) labelling either alpha (internal) or beta (external) as foreground branches. For example, the ```MCcodonNSbranchsites.dat``` file from ```alpha_branch_omega``` assumes four site classes (0, 1, 2a and 2b). In 2a and 2b, the $\omega{_2} > 1$ at the $\alpha$ branch by specifying omega = 1.5, 2, 3, 5, 8 and 10. 
-
-In the ```MCcodonNSbranchsites.dat```, change the number of species to 16 to simulate codon alignments under TREE II.
+Each subdirectory named ```alpha_branch_...``` and ```beta_branch_...``` contains the control file for each parametric setting of branch-site test (selective pressure, proportion of sites under positive selection, codon sites and true positive level) labelling either $\alpha$ (internal) or $\beta$ (external) as foreground branches. 
 
 ## Branch-site test for positive selection
 
