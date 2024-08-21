@@ -61,7 +61,6 @@ The respective parameters estimated from $n$ genes (such as branch lengths and t
 
 Now, analyse all the alignments under the branch-site test. Use the ```simFDR.R```, to calculate the LRT, and the P-values and q-value significant at 5% confidence level. 
 
-## Simulation under misspecification of the null model
 
 
 
