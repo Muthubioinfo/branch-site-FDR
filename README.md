@@ -5,15 +5,11 @@ This repository contains the files to recreate the analysis in Chapter 2 - Stati
 To run the analysis, you are required to download and compile ```EVOLVER``` and ```CODEML``` programs available in ```PAML``` package, see [http://abacus.gene.ucl.ac.uk/software/paml.html](http://abacus.gene.ucl.ac.uk/software/paml.html). Use bash/LINUX commands to run PAML programs.
 
 ## Simulating codon alignments under different levels of positive selection
-Consider two phylogenetic trees, TREE I with 8 species and TREE II with 16 species. Both trees assume uniform codon frequencies (1/61) and a uniform branch length of 0.3 nucleotide substitutions per site. The transition-transversion ratio $\kappa$ is set to 2. We simulate TREE I and TREE II in two settings, each labelled at (1) alpha branch, (2) beta branch. Thus, we have four different tree scenarios, as shown below
+Consider two phylogenetic trees, TREE I with 8 species and TREE II with 16 species. Both trees assume uniform codon frequencies (1/61) and a uniform branch length of 0.3 nucleotide substitutions per site. The transition-transversion ratio $\kappa$ is set to 2. We simulate TREE I and TREE II in two settings, each labelled either alpha branch or beta branch as foreground branches (branch under positive selection). Thus, we simulate four different scenarios (A) Tree I with alpha as foreground; (B) Tree II with alpha as foreground; (C) Tree I with beta as foreground; (D) Tree II with alpha as foreground
 
-![trees]([https://github.com/Muthubioinfo/branch-site_FDR/tree/main/branch-site-test/trees.pdf))
+Under the above settings, Simulate 10,000 protein-coding genes or codon alignments, with 90% genes representing null hypotheses (9000 genes) and the remaining 10% represent the alternative hypotheses, making up a phylogenome of 10,000 genes. 
 
-
-
-Simulate 10,000 protein-coding genes or codon alignments, with 90% genes representing null hypotheses (9000 genes) and the remaining 10% represent the alternative hypotheses, making up a phylogenome of 10,000 genes. 
-
-We can improve the level of phylogenomic simulation by simulating under different levels of positive selection, as determined by the parameters of the branch-site model. 
+We can improve the level of phylogenomic simulation by simulating under different levels of positive selection. Such levels are determined by varying the parameters of the branch-site model in each phylogemic simulation. 
 
 
 |Parameters of branch-site test | Description | Parameter value at each phylogenomic simulation  |
@@ -23,8 +19,8 @@ We can improve the level of phylogenomic simulation by simulating under differen
 | $L_{c}$                     | Number of codon sites | 100, 200, 1000, 10000 |
 | %TP                          | Percentage true positives among all simulations | 0.1, 0.2, 0.5, 1, 2, 5, 20, 50, 100 |
 
+Now, a total of 24 different phylogenomic datasets can be simulated based on the table above.  
 
-Now, a total of 24 different phylogenomic datasets can be simulated based on the table above.  The positive selection for the two trees (TREE I has 8 species and TREE II has 16 species) are tested by labelling either internal ($\alpha$) and external branch ($\beta$).
 
 To simulate codon sequence alignments under different settings shown above, use the EVOLVER program and select option 6. 
 
@@ -55,7 +51,7 @@ The primate dataset from Kosiol et al. (2008) is available in [kosiol_primate_da
 ```
 awk -v RS= '{print > ("s" NR ".txt")}' kosiol_primate_dataset.txt
 ```
-Note: The above code splits the ```kosiol_primate_dataset.txt``` file into 9,566 files each containing a codon sequence alignment. The "s" in the above code generates files as ```s1.txt, s2.txt, s3.txt,......,s9566.txt```. 
+Note: The above code splits the ```kosiol_primate_dataset.txt``` file into 9,566 files each containing a codon sequence alignment. The "s" in the above code generates files as ```s1.txt, s2.txt, s3.txt,......,s9566.txt```. And it is a best practice to keep a list of the filenames of the randomly generated $n$ genes to avoid any mishaps during this experiment. See the list of gene names and the corresponding number sequence (from 1 to 9566). 
 
 The tree topology specified in the Kosiol dataset is fixed for all the genes. The control files for the four iterations of CODEML is available in [real_data_files](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/real_data_files). Evaluate the log-likelihood under the null ($\ell_{0}$) and alternative ($\ell_{1}$) model assuming F3X4 codon frequency model. 
 
@@ -83,23 +79,32 @@ The above script is applied four times, for estimating log-likelihoods under nul
 ## Realistic simulation using empirical data
 The aim is to construct a realistic simulation using the above primate dataset. 
 
-Step 1:
+### Step-1:
 For this analysis, the first step is to remove all the positively selected genes inferred under positive selection. This also includes the positively selected genes observed in literature (Kosiol et al. 2008). We ensure that the q-values evaluated are not significant at 5%. A total of 26 genes are removed. Also, use only the alignments do not have any missing data such as gaps (```---```). This is to avoid any unwanted noise in this experiment. Use the following commands,
 
 ```
 #The file called psg.txt contains the list of positively selected genes in real data analysis
 cd /directory_with_all_the_gene_alignments/
 find -type f -name 'psg.txt' -delete
+.......
 ```
 
-For the primate dataset, the above filtering steps resulted in 6903 genes. These genes are considered as neutral genes for the primate branch. To construct a realistic simulation, randomly select $n = 500$ genes. You can use the following command to move files to another directory.
+For the primate dataset, the above filtering steps resulted in 6903 genes. Now, these genes are considered as neutral genes. To construct a realistic simulation, randomly select $n = 500$ genes. You can use the following command to move files to another directory.
 
 ```
 find . -mindepth 1 -maxdepth 1 -type f | shuf | head -n 10 | xargs -I{} mv {} dest_dir/
 ```
 
-Note: 'dest_dir' is the directory with all the randomly selected genes to be used in further steps. Create a directory called 'modified' before running the above command. It is a best practice to keep a list of the filenames of the randomly generated $n$ genes to avoid any mishaps during this experiment. See the list of gene names and the corresponding number sequence (from 1 to 9566). 
+Note: 'dest_dir' is the directory with all the randomly selected genes to be used in further steps. Create a directory called 'modified' before running the above command. 
 
-The respective parameters estimated from $n$ genes (such as branch lengths and transition-transversion ratio) are used in ```EVOLVER``` for simulating positive selected codons. For simulating positive selection, one uses alternative hypothesis with either $\omega_2 = 4$ (moderate selective pressure) or $\omega_2 = 10$ (strong selective pressure). Then, these newly simulated positive codons are concatenated at the end of $n$ gene alignment. Thus, the modified alignments now has the positively selected codons and are assumed to be under the alternative hypothesis. The remaining 6,403 unmodified genes are assumed to be under the null hypothesis.
+### Step-2:
+The respective parameters estimated from $n$ genes (such as branch lengths and transition-transversion ratio) are used in ```EVOLVER``` to simulate positive selected codons. We test the realistic simulation under (1) Moderate selective pressure, i.e $\omega_2 at foreground is 4$ and (2) Strong selective pressure with $\omega_2$ = 10 (see MCcodonNSbranchsites.dat in real-data-simulation directory).
 
+Then, these newly simulated positive codons are concatenated at the end of $n$ gene alignment. 
+
+
+
+Thus, the modified alignments now has the positively selected codons and are assumed to be under the alternative hypothesis. The remaining 6,403 unmodified genes are assumed to be under the null hypothesis.
+
+### Step-3:
 Now, analyse all the alignments with ```CODEML``` to evaluate the log-likelihoods under the null and alternative models of branch-site test. Then, use the ```simFDR.R```, to calculate the LRT, and the P-values and q-value significant at 5% confidence level. The steps are similar to the one in simulation analysis.
