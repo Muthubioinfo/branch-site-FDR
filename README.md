@@ -7,7 +7,7 @@ To run the analysis, you are required to download and compile ```EVOLVER``` and 
 ## Simulating codon alignments under different levels of positive selection
 Consider two phylogenetic trees, TREE I with 8 species and TREE II with 16 species. Both trees assume uniform codon frequencies (1/61) and a uniform branch length of 0.3 nucleotide substitutions per site. The transition-transversion ratio $\kappa$ is set to 2. We simulate TREE I and TREE II in two settings, each labelled at (1) alpha branch, (2) beta branch. Thus, we have four different tree scenarios, as shown below
 
-![IMAGE_DESCRIPTION]([url_of_image](https://github.com/Muthubioinfo/branch-site_FDR/blob/main/trees.pdf))
+![trees]([https://github.com/Muthubioinfo/branch-site_FDR/tree/main/branch-site-test/trees.pdf))
 
 
 
