@@ -76,9 +76,13 @@ lna1C <- read.table("rst1H1alt3")[,ncol(read.table("rst1H1alt3"))]
 ```
 
 ### Likelihood ratio test, P-values and FDR
-Import all the ```rst1``` files in R/Rstudio and apply the ```simFDR()``` function available in [```simFDR.R```](https://github.com/Muthubioinfo/branch-site_FDR/blob/main/function_FDR.R), and calculate the likelihood ratio test or ```LRT```, and ```P-values```, and the ```q-values``` under BH-FDR (Benjamini and Hochberg, 1995) and ST-FDR (Storey, 2002) correction method. Here, the P-values and q-values are significant at 5%. The classical power of branch-site test is compared 
+Import all the ```rst1``` files in R/Rstudio and apply the ```simFDR()``` function available in [```simFDR.R```](https://github.com/Muthubioinfo/branch-site_FDR/blob/main/function_FDR.R), and calculate the likelihood ratio test or ```LRT```, and ```P-values```, and the ```q-values``` under BH-FDR (Benjamini and Hochberg, 1995) and ST-FDR (Storey, 2002) correction method. Here, the P-values and q-values are significant at 5%. 
 
-In the ```simFDR``` function calculates the power of positive selection using both the BH-FDR (Benjamini-Hochberg, 1995) and ST-FDR (Storey, 2002) methods. 
+Using the ```simFDR``` function, we calculate the power of positive selection using both the BH-FDR (Benjamini-Hochberg, 1995) and ST-FDR (Storey, 2002) methods. The classical power of the test is compared again the two FDR powers, BH-FDR and ST-FDR.
+
+```
+simFDR(ln0,ln1A,ln1B,ln1C,lna0,lna1A,lna1B,lna1C)
+```
 
 ## Real data analysis
 For this section, I test the statistical properties of branch-site test and FDR under real data setting. The dataset is obtained from [Kosiol et al. (2008)](https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1000144), consisting of 9,566 genes with ancestral primate branch focussed as the foreground. 
@@ -124,7 +128,6 @@ For this analysis, the first step is to remove all the positively selected genes
 #The file called psg.txt contains the list of positively selected genes in real data analysis
 cd /directory_with_all_the_gene_alignments/
 find -type f -name 'psg.txt' -delete
-.......
 ```
 
 For the primate dataset, the above filtering steps resulted in 6903 genes. Now, these genes are considered as neutral genes. To construct a realistic simulation, randomly select $n = 500$ genes. You can use the following command to move files to another directory.
@@ -138,11 +141,9 @@ Note: 'dest_dir' is the directory with all the randomly selected genes to be use
 ### Step-2:
 The respective parameters estimated from $n$ genes (such as branch lengths and transition-transversion ratio) are used in ```EVOLVER``` to simulate positive selected codons. We test the realistic simulation under (1) Moderate selective pressure, i.e $\omega_2 at foreground is 4$ and (2) Strong selective pressure with $\omega_2$ = 10 (see MCcodonNSbranchsites.dat in real-data-simulation directory).
 
+### Step-3:
 Then, these newly simulated positive codons are concatenated at the end of $n$ gene alignment. 
-
-
-
 Thus, the modified alignments now has the positively selected codons and are assumed to be under the alternative hypothesis. The remaining 6,403 unmodified genes are assumed to be under the null hypothesis.
 
-### Step-3:
-Now, analyse all the alignments with ```CODEML``` to evaluate the log-likelihoods under the null and alternative models of branch-site test. Then, use the ```simFDR.R```, to calculate the LRT, and the P-values and q-value significant at 5% confidence level. The steps are similar to the one in simulation analysis.
+### Step-4:
+Now, analyse all the alignments with ```CODEML``` to evaluate the log-likelihoods under the null and alternative models of branch-site test. Then, use the ```simFDR.R```, to calculate the LRT, and the P-values and q-value significant at 5% confidence level. This step is same as the one used simulation analysis and real data analysis.
