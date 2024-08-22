@@ -36,7 +36,44 @@ Ensure that the appropriate control file called ```MCcodonNSbranchsites.dat``` i
 For each simulated alignment, evaluated the log-likelihoods under the null model ($\ell_{0}$) and alternative model ($\ell_{1}$) using the ```CODEML``` program. Under the null model, the log-likelihood ($\ell_{0}$) is estimated by fixing the $\omega$ to [1](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/null_model), whereas the omega and other free parameters are estimated under the alternative model. 
 Use the control files from [codeml_ctl_positive_selection](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection) to evaluate the $\ell_{0}$ and $\ell_{1}$ under the null and alternative models respectively. The log-likelihood under alternative model is estimated for three iterations each with initial $\omega$ = [1](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/alternate_iteration_1), [2](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/alternate_iteration_2), and [4](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/codeml_ctl_positive_selection/alternate_iteration_3). 
 
-The ```CODEML``` returns the output file called ```rst1``` file, which contains the estimated parameters and maximum likelihood for each gene. We generate four rst1 files for the four codeml iterations (null model, alternative model 1, 2 and 3). The rst1 files after analysing under null hypothesis is named as ```rst1H0null```, ```rst1H0alt1```,```rst1H0alt2``` and ```rst1H0alt3```. Similarly, the rst1 files for simulations under the alternative hypothesis are named as ```rst1H1null```, ```rst1H1alt1```,```rst1H1alt2``` and ```rst1H1alt3```. 
+The ```CODEML``` returns the output file called ```rst1``` file, which contains the estimated parameters and maximum likelihood for each gene. We generate four rst1 files for the four codeml iterations (null model, alternative model 1, 2 and 3). The rst1 files after analysing under null hypothesis is named as ```rst1H0null```, ```rst1H0alt1```,```rst1H0alt2``` and ```rst1H0alt3```. Similarly, the rst1 files for simulations under the alternative hypothesis are named as ```rst1H1null```, ```rst1H1alt1```,```rst1H1alt2``` and ```rst1H1alt3```. Now, you can load these files in R. Use the following command to import all the log-likelihoods for all the iterations.
+
+```
+############## Null hypothesis ################################
+#Loading rst1 file from iteration 1 of CODEML
+#Iteration 1 - Null model (H0) 
+#Initial_omega=1 fix_omega = 1
+ln0 <- read.table("rst1H0null")[,ncol(read.table("rst1H0null"))] #rst1 - lnL0 
+
+#Loading rst1 file from iteration 2 of CODEML
+#Alternate model: H1 
+#estimate_omega=0 fix_omega = 1
+ln1A <- read.table("rst1H0alt1")[,ncol(read.table("rst1H0alt1"))] #rst1 - lnL1 for 1st iteration
+
+#Loading rst1 file from iteration 3 of CODEML
+#Alternate model: H1
+#estimate_omega=0 fix_omega = 2
+ln1B <- read.table("rst1H0alt2")[,ncol(read.table("rst1H0alt2"))]
+
+#Loading rst1 file from iteration 4 of CODEML
+#Alternate model: H1
+#estimate_omega=0 fix_omega = 4
+ln1C <- read.table("rst1H0alt3")[,ncol(read.table("rst1H0alt3"))]
+
+######## Alternative hypothesis #############
+#Loading rst1 file from iteration 1
+lna0 <- read.table("rst1H1null")[,ncol(read.table("rst1H1null"))] #rst1 - lnL0 values
+
+#Loading rst1 file from iteration 2
+lna1A <- read.table("rst1H1alt1")[,ncol(read.table("rst1H1alt1"))] #rst1 - lnL1 for 1st iteration
+
+#Loading rst1 file from iteration 3
+lna1B <- read.table("rst1H1alt2")[,ncol(read.table("rst1H1alt2"))]
+
+#Loading rst1 file from iteration 4
+lna1C <- read.table("rst1H1alt3")[,ncol(read.table("rst1H1alt3"))]
+
+```
 
 ### Likelihood ratio test, P-values and FDR
 Import all the ```rst1``` files in R/Rstudio and apply the ```simFDR()``` function available in [```simFDR.R```](https://github.com/Muthubioinfo/branch-site_FDR/blob/main/function_FDR.R), and calculate the likelihood ratio test or ```LRT```, and ```P-values```, and the ```q-values``` under BH-FDR (Benjamini and Hochberg, 1995) and ST-FDR (Storey, 2002) correction method. Here, the P-values and q-values are significant at 5%. The classical power of branch-site test is compared 
@@ -51,6 +88,7 @@ The primate dataset from Kosiol et al. (2008) is available in [kosiol_primate_da
 ```
 awk -v RS= '{print > ("s" NR ".txt")}' kosiol_primate_dataset.txt
 ```
+
 Note: The above code splits the ```kosiol_primate_dataset.txt``` file into 9,566 files each containing a codon sequence alignment. The "s" in the above code generates files as ```s1.txt, s2.txt, s3.txt,......,s9566.txt```. And it is a best practice to keep a list of the filenames of the randomly generated $n$ genes to avoid any mishaps during this experiment. See the list of gene names and the corresponding number sequence (from 1 to 9566). 
 
 The tree topology specified in the Kosiol dataset is fixed for all the genes. The control files for the four iterations of CODEML is available in [real_data_files](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/real_data_files). Evaluate the log-likelihood under the null ($\ell_{0}$) and alternative ($\ell_{1}$) model assuming F3X4 codon frequency model. 
