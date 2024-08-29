@@ -139,7 +139,12 @@ find . -mindepth 1 -maxdepth 1 -type f | shuf | head -n 10 | xargs -I{} mv {} de
 Note: 'dest_dir' is the directory with all the randomly selected genes to be used in further steps. Create a directory called 'modified' before running the above command. 
 
 ### Step-2:
-The respective parameters estimated from $n$ genes (such as branch lengths and transition-transversion ratio) are used in ```EVOLVER``` to simulate positive selected codons. We test the realistic simulation under (1) Moderate selective pressure, i.e $\omega_2 at foreground is 4$ and (2) Strong selective pressure with $\omega_2$ = 10 (see MCcodonNSbranchsites.dat in real-data-simulation directory).
+The respective parameters estimated from $n$ genes (such as branch lengths and transition-transversion ratio) are used in ```EVOLVER``` to simulate positive selected codons. Use the following command shown below. This command applies for all simulation. 
+Note that the parameters such as the branch-length, codon frequencies and kappa correspond to the estimates obtained during real data analysis. This is to ensure that new simulation obeys the same real setting as the original genes in the dataset. The only difference between the neutral gene and the positive simulated codons is the value of omega > 1. Under these conditions, two different positive simulations are constructed (1) Moderate selective pressure at foreground primate branch, where $\omega = 4$, and (2) Strong selective pressure, with $\omega$ = 10. See an example of MCcodonNSbranchsites.dat in real-data-simulation directory). 
+
+```
+evolver 6 MCcodonNSbranchsites.dat
+```
 
 ### Step-3:
 Then, these newly simulated positive codons are concatenated at the end of $n$ gene alignment. 
