@@ -148,7 +148,52 @@ evolver 6 MCcodonNSbranchsites.dat
 
 ### Step-3:
 Then, these newly simulated positive codons are concatenated at the end of $n$ gene alignment. 
-Thus, the modified alignments now has the positively selected codons and are assumed to be under the alternative hypothesis. The remaining 6,403 unmodified genes are assumed to be under the null hypothesis.
+Thus, the modified alignments now has the positively selected codons and are assumed to be under the alternative hypothesis. The remaining 6,403 unmodified genes are assumed to be under the null hypothesis. Use the following bash commands for concatenation.
+
+```
+# Define the input files and output file
+file1="templ.txt"
+file2="mc.txt"
+output_file="mod.txt"
+
+# Get the number of species and the length of the sequences
+num_species=$(awk '/^[1-9]/ {print $1}' $file1)
+length1=$(awk '/^[1-9]/ {print $1}' $file1)
+length2=$(awk '/^[1-9]/ {print $2}' $file2)
+total_length=$((length1 + length2))
+
+# Extract the sequence data from the files, excluding the first line (header)
+#sed -e "/$length1/d" $file1 > temp_file1.txt
+#sed -e "/$length2/d" $file2 > temp_file2.txt
+
+# Write the new header to the output file
+echo "$num_species $total_length" > "$output_file"
+
+#Assign variables for each sequence within the actual alignment
+neutral1=$(awk '/hg18/{flag=1; next} /panTro2/{flag=0} flag' $file1)
+neutral2=$(awk '/panTro2/{flag=1; next} /rheMac2/{flag=0} flag' $file1)
+neutral3=$(awk '/rheMac2/{flag=1; next} /mm8/{flag=0} flag' $file1)
+neutral4=$(awk '/mm8/{flag=1; next} /rn4/{flag=0} flag' $file1)
+neutral5=$(awk '/rn4/{flag=1; next} /canFam2/{flag=0} flag' $file1)
+neutral6=$(awk '/canFam2/{flag=1; next} / /{flag=0} flag' $file1)
+
+##Assign variables for each positively simulated codon alignment of 50 codons.
+positive1=$(awk '$1=="hg18" { gsub("hg18 ","",$0);print $0 }' $file2 | tr -d ' ')
+positive2=$(awk '$1=="panTro2" { gsub("panTro2 ","",$0);print $0 }' $file2 | tr -d ' ')
+positive3=$(awk '$1=="rheMac2" { gsub("rheMac2 ","",$0);print $0 }' $file2 | tr -d ' ')
+positive4=$(awk '$1=="mm8" { gsub("mm8 ","",$0);print $0 }' $file2 | tr -d ' ')
+positive5=$(awk '$1=="rn4" { gsub("rn4 ","",$0);print $0 }' $file2 | tr -d ' ')
+positive6=$(awk '$1=="canFam2" { gsub("canFam2 ","",$0);print $0 }' $file2 | tr -d ' ')
+
+##Concatenate the neutral alignment and the positively selected codon alignment                 
+mod1="$neutral1$positive1"
+mod2="$neutral2$positive2"
+mod3="$neutral3$positive3"
+mod4="$neutral4$positive4"
+mod5="$neutral5$positive5"
+mod6="$neutral6$positive6"
+
+```
 
 ### Step-4:
-Now, analyse all the alignments with ```CODEML``` to evaluate the log-likelihoods under the null and alternative models of branch-site test. Then, use the ```simFDR.R```, to calculate the LRT, and the P-values and q-value significant at 5% confidence level. This step is same as the one used simulation analysis and real data analysis.
+Now, analyse the alignments with ```CODEML``` to evaluate the log-likelihoods under the null and alternative models of branch-site test. The tree topology (```[primate.trees](real_data_files/primate.trees)```) and the control files for CODEML are same as the files used in real data analysis. After evaluating the log-likelihoods. use the ```simFDR.R```, to calculate the LRT, and the P-values and q-value significant at 5% confidence level. This step is also same as the one used simulation analysis and real data analysis.
