@@ -24,7 +24,7 @@ Now, a total of 24 different phylogenomic datasets can be simulated based on the
 
 To simulate codon sequence alignments under different settings shown above, use the EVOLVER program and select option 6. 
 
-```
+```bash
 evolver 6 MCcodonNSbranchsites.dat
 ```
 
@@ -38,7 +38,7 @@ Use the control files from [codeml_ctl_positive_selection](https://github.com/Mu
 
 The ```CODEML``` returns the output file called ```rst1``` file, which contains the estimated parameters and maximum likelihood for each gene. We generate four rst1 files for the four codeml iterations (null model, alternative model 1, 2 and 3). The rst1 files after analysing under null hypothesis is named as ```rst1H0null```, ```rst1H0alt1```,```rst1H0alt2``` and ```rst1H0alt3```. Similarly, the rst1 files for simulations under the alternative hypothesis are named as ```rst1H1null```, ```rst1H1alt1```,```rst1H1alt2``` and ```rst1H1alt3```. Now, you can load these files in R. Use the following command to import all the log-likelihoods for all the iterations.
 
-```
+```r
 ############## Null hypothesis ################################
 #Loading rst1 file from iteration 1 of CODEML
 #Iteration 1 - Null model (H0) 
@@ -80,7 +80,7 @@ Import all the ```rst1``` files in R/Rstudio and apply the ```simFDR()``` functi
 
 Using the ```simFDR``` function, we calculate the power of positive selection using both the BH-FDR (Benjamini-Hochberg, 1995) and ST-FDR (Storey, 2002) methods. The classical power of the test is compared again the two FDR powers, BH-FDR and ST-FDR.
 
-```
+```r
 simFDR(ln0,ln1A,ln1B,ln1C,lna0,lna1A,lna1B,lna1C)
 ```
 
@@ -89,7 +89,7 @@ For this section, I test the statistical properties of branch-site test and FDR 
 
 The primate dataset from Kosiol et al. (2008) is available in [kosiol_primate_dataset.txt.zip](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/real_data_files) to work out the experiment in this section. Use ```split``` the file into 9566 files each containing the 9566 codon alignment.
 
-```
+```r
 awk -v RS= '{print > ("s" NR ".txt")}' kosiol_primate_dataset.txt
 ```
 
@@ -97,7 +97,7 @@ Note: The above code splits the ```kosiol_primate_dataset.txt``` file into 9,566
 
 The tree topology specified in the Kosiol dataset is fixed for all the genes. The control files for the four iterations of CODEML is available in [real_data_files](https://github.com/Muthubioinfo/branch-site_FDR/tree/main/real_data_files). Evaluate the log-likelihood under the null ($\ell_{0}$) and alternative ($\ell_{1}$) model assuming F3X4 codon frequency model. 
 
-```
+```bash
 #Loop to link all files to the target directory for branch-site test
 for i in {1..9566}
 cd /target-directory/
@@ -124,7 +124,7 @@ The aim is to construct a realistic simulation using the above primate dataset.
 ### Step-1:
 For this analysis, the first step is to remove all the positively selected genes inferred under positive selection. This also includes the positively selected genes observed in literature (Kosiol et al. 2008). We ensure that the q-values evaluated are not significant at 5%. A total of 26 genes are removed. Also, use only the alignments do not have any missing data such as gaps (```---```). This is to avoid any unwanted noise in this experiment. Use the following commands,
 
-```
+```bash
 #The file called psg.txt contains the list of positively selected genes in real data analysis
 cd /directory_with_all_the_gene_alignments/
 find -type f -name 'psg.txt' -delete
@@ -132,7 +132,7 @@ find -type f -name 'psg.txt' -delete
 
 For the primate dataset, the above filtering steps resulted in 6903 genes. Now, these genes are considered as neutral genes. To construct a realistic simulation, randomly select $n = 500$ genes. You can use the following command to move files to another directory.
 
-```
+```bash
 find . -mindepth 1 -maxdepth 1 -type f | shuf | head -n 10 | xargs -I{} mv {} dest_dir/
 ```
 
@@ -142,7 +142,7 @@ Note: 'dest_dir' is the directory with all the randomly selected genes to be use
 The respective parameters estimated from $n$ genes (such as branch lengths and transition-transversion ratio) are used in ```EVOLVER``` to simulate positive selected codons. Use the following command shown below. This command applies for all simulation. 
 Note that the parameters such as the branch-length, codon frequencies and kappa correspond to the estimates obtained during real data analysis. This is to ensure that new simulation obeys the same real setting as the original genes in the dataset. The only difference between the neutral gene and the positive simulated codons is the value of omega > 1. Under these conditions, two different positive simulations are constructed (1) Moderate selective pressure at foreground primate branch, where $\omega = 4$, and (2) Strong selective pressure, with $\omega$ = 10. See an example of MCcodonNSbranchsites.dat in real-data-simulation directory). 
 
-```
+```bash
 evolver 6 MCcodonNSbranchsites.dat
 ```
 
@@ -150,7 +150,7 @@ evolver 6 MCcodonNSbranchsites.dat
 Then, these newly simulated positive codons are concatenated at the end of $n$ gene alignment. 
 Thus, the modified alignments now has the positively selected codons and are assumed to be under the alternative hypothesis. The remaining 6,403 unmodified genes are assumed to be under the null hypothesis. Use the following bash commands for concatenation.
 
-```
+```bash
 # Define the input files and output file
 file1="templ.txt"
 file2="mc.txt"
